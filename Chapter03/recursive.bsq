@@ -1,0 +1,11 @@
+namespace NSMain;
+
+recursive function fibonacciNumber(n: Int): Int {
+    return if (n == 0) 0
+           elif (n < 3) 1
+           else fibonacciNumber[recursive](n - 1) + fibonacciNumber [recursive](n - 2);
+}
+
+entrypoint function main(): Int {
+    return fibonacciNumber[recursive](10);
+}
