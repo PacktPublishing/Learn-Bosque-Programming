@@ -1,0 +1,32 @@
+namespace NSMain;
+
+entrypoint function main(): Int {
+    let merchCategories = { 
+        clothes = { 
+            men = { 
+                hats = [], 
+                sweaters = [], 
+                trousers = [] 
+            }, 
+            women = { 
+                hats = [], 
+                sweaters = [], 
+                trousers = [] 
+            } 
+        }, 
+        accessories = { 
+            kitchen = { 
+                cups = [], 
+                cutlery = [] 
+            }, 
+            room = { 
+                clocks = [] 
+            } 
+        } 
+    };
+
+    let selected = merchCategories.accessories.kitchen.cups;
+    _debug(selected);
+
+    return 0;
+}

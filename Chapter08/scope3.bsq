@@ -1,0 +1,19 @@
+namespace NSMain;
+
+function log(msg: String, label?: String, level?: String): None {
+
+    let lvl = String::concat("[", (if (level != none) level else "info"), "]");
+    let lbl = String::concat("[", (if (label != none) label else ""), "]");
+
+    _debug(String::concat(lvl, lbl, " ", msg));
+
+    return none;
+
+}
+
+entrypoint function main(): Int {
+
+    NSMain::log("This is a log message", "main");
+
+    return 0;
+}

@@ -1,0 +1,9 @@
+namespace NSMain;
+
+function addOne(num: Int): Int { 
+    return num + 1; 
+}
+
+entrypoint function main(): Int {
+    return addOne(1);
+}

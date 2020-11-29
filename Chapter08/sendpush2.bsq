@@ -1,0 +1,27 @@
+namespace NSMain;
+
+function sendPush(token: String, firstName: String, lastName: String, nickname: String, ...activities: List<String>): Bool { 
+
+    let ln = String::concat(" ", lastName); 
+    let nn = String::concat(" aka ", nickname); 
+
+    let title = String::concat("How are you, ", firstName, ln, nn, "?"); 
+    let userActivities = String::concat(...activities); 
+    let body = String::concat("Today is November 16th and it's going to be rainy and windy. How about doing one of your favorite activities: ", userActivities, "?"); 
+
+    return doSend(token, title, body); 
+
+}
+
+function doSend(token: String, title: String, body: String): Bool { 
+    _debug(String::concat(token, " | ", title, " | ", body)); 
+    return true; 
+}
+
+entrypoint function main(): Int {
+    
+    let activities = List<String>@{"cooking", "chess", "reading"};
+    let result1 = sendPush("faketoken", "John", "Smith", "Strongman", ...activities);
+
+    return 0;
+}

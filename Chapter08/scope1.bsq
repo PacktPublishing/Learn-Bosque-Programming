@@ -1,0 +1,7 @@
+namespace NSMain;
+
+global apiURL: String = "http://myapi.com/v1";
+
+entrypoint function main(): String {
+    return NSMain::apiURL;
+}

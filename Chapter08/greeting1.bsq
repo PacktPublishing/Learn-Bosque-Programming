@@ -1,0 +1,14 @@
+namespace NSMain;
+
+function greeting(name?: String): String { 
+    var n = if (name != none) name else "friend"; 
+    return String::concat("Hello, ", n); 
+}
+
+entrypoint function main(): Int {
+    
+    _debug(greeting());
+    _debug(greeting("John"));
+
+    return 0;
+}

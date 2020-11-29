@@ -1,0 +1,26 @@
+namespace NSMain;
+
+function sendPush(token: String, firstName: String, lastName?: String, nickname?: String): Bool { 
+
+    let ln = if (lastName != none) String::concat(" ", lastName) else ""; 
+    let nn = if (nickname != none) String::concat(" aka ", nickname) else ""; 
+
+    let title = String::concat("How are you, ", firstName, ln, nn, "?"); 
+    let body = "Today is November 16th and it's going to be rainy and windy. Better stay home with a cup of hot chocolate!"; 
+
+    return doSend(token, title, body); 
+}
+
+function doSend(token: String, title: String, body: String): Bool { 
+    _debug(String::concat(token, " | ", title, " | ", body)); 
+    return true; 
+}
+
+entrypoint function main(): Int {
+    
+    let result1 = sendPush(...["faketoken", "John", "Smith", "Strongman"]);
+    let result2 = sendPush(...["faketoken", "John", "Smith"]);
+    let result3 = sendPush(...["faketoken", "John"]);
+
+    return 0;
+}

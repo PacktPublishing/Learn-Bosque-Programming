@@ -1,0 +1,33 @@
+namespace NSMain;
+
+function sendPush( 
+    token: String, 
+    firstName: String, lastName: String, nickname: String, 
+    buildMsg: fn(date: String) -> String 
+): Bool { 
+
+    let ln = String::concat(" ", lastName); 
+    let nn = String::concat(" aka ", nickname); 
+
+    let title = String::concat("How are you, ", firstName, ln, nn, "?"); 
+    let body = buildMsg("November 16th"); 
+
+    return doSend(token, title, body); 
+} 
+
+function doSend(token: String, title: String, body: String): Bool { 
+    _debug(String::concat(token, " | ", title, " | ", body)); 
+    return true; 
+}
+
+entrypoint function main(): Bool {
+
+    let user = { token="faketoken", lastName="Smith", firstName="Alice", nickname="Slippy", age=34, city="Washington" };
+    let { token=tok, firstName=fname, lastName=lname, nickname=nick } = user.{token, firstName, lastName, nickname};
+    let sent = sendPush(
+        tok, fname, lname, nick,
+        fn(date) => String::concat("Today is ", date, ". Have a great day!")
+    );
+
+    return sent;
+}

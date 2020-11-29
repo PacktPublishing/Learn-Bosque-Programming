@@ -1,0 +1,12 @@
+namespace NSMain;
+
+entity Environment { 
+    const apiUrl: String = "http://myapi.com/v1"; 
+    const dbHost: String = "host.database.com"; 
+    const dbUser: String = "db_user"; 
+    const dbPass: String = "db+P4ssw0rd"; 
+}
+
+entrypoint function main(): String {
+    return Environment::apiUrl;
+}

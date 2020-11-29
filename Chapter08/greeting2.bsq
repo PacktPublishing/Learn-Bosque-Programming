@@ -1,0 +1,18 @@
+namespace NSMain;
+
+function greeting(firstName: String, lastName?: String, nickname?: String): String { 
+
+    let ln = if (lastName != none) String::concat(" ", lastName) else ""; 
+    let nn = if (nickname != none) String::concat(" aka ", nickname) else ""; 
+
+    return String::concat("Hello, ", firstName, ln, nn); 
+}
+
+entrypoint function main(): Int {
+    
+    _debug(greeting("John"));
+    _debug(greeting("John", nickname="Strongman"));
+    _debug(greeting(lastName="Smith", firstName="John", "Strongman"));
+
+    return 0;
+}
