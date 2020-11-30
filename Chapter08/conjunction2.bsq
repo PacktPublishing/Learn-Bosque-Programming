@@ -1,0 +1,30 @@
+namespace NSMain;
+
+concept StandardLogger {
+    static log(msg: String, label?: String, level?: String): None {
+        let lvl = String::concat("[", (if (level != none) level else "info"), "]");
+        let lbl = String::concat("[", (if (label != none) label else ""), "]");
+
+        _debug(String::concat(lvl, lbl, " ", msg));
+        return none;
+     }
+}
+
+concept QueueLogger {
+    static queueLog(msg: String, label?: String, level?: String): None {
+        let lvl = String::concat("[", (if (level != none) level else "info"), "]");
+        let lbl = String::concat("[", (if (label != none) label else ""), "]");
+
+        _debug(String::concat("Sent to log queue: ", lvl, lbl, " ", msg));
+        return none;
+    }
+}
+
+typedef Logger = StandardLogger & QueueLogger;
+
+entrypoint function main(): Int {
+
+    Logger::queueLog("Test log");
+
+    return 0;
+}

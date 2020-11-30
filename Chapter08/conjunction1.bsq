@@ -1,0 +1,24 @@
+namespace NSMain;
+
+concept Environment {
+    const apiUrl: String = "http://myapi.com/v1";
+    const dbHost: String = "host.database.com";
+    const dbUser: String = "db_user";
+    const dbPass: String = "db+P4ssw0rd";
+}
+
+concept ModuleProperties {
+    const apiClientId: String = "abcdef-gh123-45ij";
+    const apiClientSecret: String = "xc9087-23igh_sdfHJ1213ij/.";
+    const resources: Tuple = ["email", "profile"];
+}
+
+typedef Config = Environment & ModuleProperties;
+
+entrypoint function main(): Int {
+
+    let res = Config::resources;
+    _debug(res);
+
+    return 0;
+}
