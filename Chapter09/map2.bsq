@@ -1,0 +1,19 @@
+namespace NSMain;
+
+entrypoint function main(): Int {
+
+    let groupA = Set<String>@{"Alice", "Bob"};
+    let groupB = Set<String>@{"John", "Martha"};
+    let users = Map<String, Int>@{ "John" => 12, "Alice" => 15, "Bob" => 14 };
+
+    let allPresentA = users.domainSubsetOf(groupA);
+    let allPresentB = users.domainSubsetOf(groupB);
+
+    _debug(allPresentA);
+    _debug(allPresentB);
+
+    let awarded = users.remap<Int>(fn(name, points) => points + 10);
+    _debug(awarded);
+
+    return 0;
+}

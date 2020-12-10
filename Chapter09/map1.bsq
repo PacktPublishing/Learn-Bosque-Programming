@@ -1,0 +1,9 @@
+namespace NSMain;
+
+entrypoint function main(): Int {
+
+    let map = Map<String, Int>@{ "John" => 12, "Alice" => 15, "Bob" => 14 };
+    _debug(map);
+
+    return 0;
+}

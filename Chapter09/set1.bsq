@@ -1,0 +1,42 @@
+namespace NSMain;
+
+entrypoint function main(): Int {
+
+    /**
+     * IMPORTANT NOTE
+     * Currently, `Set` is not fully implemented and therefore, none of the below methods will work.
+     * If you will try to use it and compile a program, Bosque will throw an error
+     */
+
+    let bob = Set<Int>@{2,4,9,10,14};
+    let alice = Set<Int>@{1,9,12};
+
+    let sub = alice.subsetOf(bob);
+    let dis = alice.disjoint(bob);
+    let eq = alice.equal(bob);
+
+    let un = alice.union(bob);
+    let intsct = alice.intersect(bob);
+
+    let aliceWithoutBob = alice.difference(bob);
+    let bobWithoutAlice = bob.difference(alice);
+
+    let symdif = alice.symmetricDifference(bob);
+
+    _debug(bob);
+    _debug(alice);
+
+    _debug(sub);
+    _debug(dis);
+    _debug(eq);
+
+    _debug(un);
+    _debug(intsct);
+
+    _debug(aliceWithoutBob);
+    _debug(bobWithoutAlice);
+
+    _debug(symdif);
+
+    return 0;
+}

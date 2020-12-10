@@ -1,0 +1,13 @@
+namespace NSMain;
+
+entrypoint function main(): Int {
+
+    let admins = List<String>@{"Alice", "John"}; 
+    let mods = List<String>@{"Margaret", "Bob"}; 
+    let users = List<String>@{"Percy", "Christine"}; 
+    let allUsers = List<String>::concat(admins, mods, users); 
+
+    _debug(allUsers); 
+
+    return 0;
+}
