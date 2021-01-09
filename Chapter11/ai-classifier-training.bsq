@@ -1,0 +1,63 @@
+namespace NSMain;
+
+typedef Sample = [Int, Int, Int];
+
+entity Perceptron {
+    field weights: List<Int>;
+    field alfa: Int = 1;
+    field currentSample: Int = 0;
+}
+
+function activation(s: Int): Int {
+    return if (s > 0) 1 else 0;
+}
+
+function multiplyVectors(
+    vector1: List<Int>,
+    vector2: List<Int>
+): Int {
+    return vector1
+        .mapIndex<Int>(fn(el, i) => el * vector2.get(i))
+        .sum();
+}
+
+function train(
+    perceptron: Perceptron,
+    trainData: List<Sample>
+): Perceptron {
+    return NSIterate::steps<Perceptron>(
+        perceptron,
+        trainData.size(),
+        fn(perc) => {
+            let { weights = w, currentSample = i, alfa = a } = perc.{ weights, currentSample, alfa };
+            let [x, y, target] = trainData.get(i);
+            let sum = multiplyVectors(List<Int>@{x, y}, w);
+            let output = activation(sum);
+
+            let w1 = w.get(0) + a * (target - output) * x;
+            let w2 = w.get(1) + a * (target - output) * y;
+
+            return perc.update(
+                weights = List<Int>@{w1, w2},
+                currentSample = i + 1
+            );
+        }
+    );
+}
+
+entrypoint function main(): Int {
+    var p = Perceptron@{ List<Int>@{ 2, 3 } };
+    let trainSet = List<Sample>@{
+        [5, -5, 1],
+        [-5, -5, 0],
+        [-5, 5, 0],
+        [5, 5, 1]
+    };
+    p = train(p, trainSet);
+
+    let inputs = List<Int>@{ -2, 4 };
+    let dotProduct = multiplyVectors( inputs, p.weights );
+    let output = activation(dotProduct);
+
+    return output;
+}

@@ -1,0 +1,27 @@
+namespace NSMain;
+
+entity Perceptron {
+    field weights: List<Int>;
+    field alfa: Int = 1;
+}
+
+function activation(s: Int): Int {
+    return if (s > 0) 1 else 0;
+}
+
+function multiplyVectors(
+    vector1: List<Int>,
+    vector2: List<Int>
+): Int {
+    return vector1
+        .mapIndex<Int>(fn(el, i) => el * vector2.get(i))
+        .sum();
+}
+
+entrypoint function main(): Int {
+    let p = Perceptron@{ List<Int>@{ 2, 3 } };
+    let inputs = List<Int>@{ 2, 4 };
+    let dotProduct = multiplyVectors( inputs, p.weights );
+    let output = activation(dotProduct);
+    return output;
+}

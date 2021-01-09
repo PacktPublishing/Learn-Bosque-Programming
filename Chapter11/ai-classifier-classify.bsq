@@ -1,0 +1,88 @@
+namespace NSMain;
+
+typedef Sample = [Int, Int, Int];
+
+entity Perceptron {
+    field weights: List<Int>;
+    field alfa: Int = 1;
+    field currentSample: Int = 0;
+}
+
+function activation(s: Int): Int {
+    return if (s > 0) 1 else 0;
+}
+
+function multiplyVectors(
+    vector1: List<Int>,
+    vector2: List<Int>
+): Int {
+    return vector1
+        .mapIndex<Int>(fn(el, i) => el * vector2.get(i))
+        .sum();
+}
+
+function train(
+    perceptron: Perceptron,
+    trainData: List<Sample>
+): Perceptron {
+    return NSIterate::steps<Perceptron>(
+        perceptron,
+        trainData.size(),
+        fn(perc) => {
+            let { weights = w, currentSample = i, alfa = a } = perc.{ weights, currentSample, alfa };
+            let [x, y, target] = trainData.get(i);
+            let sum = multiplyVectors(List<Int>@{x, y}, w);
+            let output = activation(sum);
+
+            let w1 = w.get(0) + a * (target - output) * x;
+            let w2 = w.get(1) + a * (target - output) * y;
+
+            return perc.update(
+                weights = List<Int>@{w1, w2},
+                currentSample = i + 1
+            );
+        }
+    );
+}
+
+function classify(x: Int, y: Int, perceptron: Perceptron): Int {
+    let sum = multiplyVectors(List<Int>@{x, y}, perceptron.weights);
+    return activation(sum);
+}
+
+function getQuarter(p1Out: Int, p2Out: Int): String {
+    return if(p1Out == 1 && p2Out == 1) "Quarter 1"
+           elif(p1Out == 1 && p2Out == 0) "Quarter 2"
+           elif(p1Out == 0 && p2Out == 0) "Quarter 3"
+           elif(p1Out == 0 && p2Out == 1) "Quarter 4"
+           else "Unknown";
+}
+
+entrypoint function main(): String {
+    let trainSet1 = List<Sample>@{
+        [5, -5, 0],
+        [-5, -5, 0],
+        [-5, 5, 1],
+        [5, 5, 1]
+    };
+    let trainSet2 = List<Sample>@{
+        [5, -5, 1],
+        [-5, -5, 0],
+        [-5, 5, 0],
+        [5, 5, 1]
+    };
+
+    var p1 = Perceptron@{ weights = List<Int>@{1, 3} };
+    var p2 = Perceptron@{ weights = List<Int>@{2, 4} };
+
+    p1 = train(p1, trainSet1);
+    p2 = train(p2, trainSet2);
+
+    var x = -2;
+    var y = 4;
+
+    let p1Out = classify(x, y, p1);
+    let p2Out = classify(x, y, p2);
+
+    return String::concat("Answer: ", getQuarter(p1Out, p2Out));
+}
