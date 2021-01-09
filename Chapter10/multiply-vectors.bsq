@@ -1,0 +1,16 @@
+namespace NSMain;
+
+function multiplyVectors(
+    vector1: List<Int>,
+    vector2: List<Int>
+): Int {
+    return vector1
+        .mapIndex<Int>(fn(el, i) => el * vector2.get(i))
+        .sum();
+}
+
+entrypoint function main(): Int {
+    let va = List<Int>@{ 2, 4, 7, 12, 1, 7, 3 };
+    let vb = List<Int>@{ 8, 4, 32, 64, 8, 9, 2 };
+    return multiplyVectors(va, vb);
+}

@@ -1,0 +1,27 @@
+namespace NSMain;
+
+entity Context {
+    field currentMessage: Int = 0;
+    field messages: List<String> = List<String>@{ "Hey", "Hi", "Hello" };
+}
+
+function sendMessage(ctx: Context): Context {
+    let { currentMessage = curr } = ctx.{ currentMessage };
+    let msg = ctx.messages.get(curr);
+
+    _debug(msg); // simulate sending a message
+
+    return ctx.update(currentMessage = curr + 1);
+}
+
+entrypoint function main(): String {
+
+    var context = Context@{};
+    context = NSIterate::steps<Context>(
+        context,
+        context.messages.size(),
+        fn(ctx) => sendMessage(ctx)
+    );
+
+    return "";
+}

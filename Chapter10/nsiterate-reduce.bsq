@@ -1,0 +1,24 @@
+namespace NSMain;
+
+typedef Potion = { hp: Float64, speed: Float64, mana: Float64 };
+
+entrypoint function main(): Potion {
+
+    let potions = List<Potion>@{
+        { hp = 1.2f, speed = 2.0f, mana = 9.2f },
+        { hp = 4.3f, speed = 2.1f, mana = 13.4f },
+        { hp = 10.5f, speed = 1.2f, mana = 0.8f }
+    };
+
+    let summary = NSIterate::reduce<Potion>(
+        { hp = 0.0f, speed = 0.0f, mana = 0.0f },
+        potions,
+        fn(acc, curr) => ({
+            hp = acc.hp + curr.hp,
+            speed = acc.speed + curr.speed,
+            mana = acc.mana + curr.mana
+        })
+    );
+
+    return summary;
+}

@@ -1,0 +1,31 @@
+namespace NSMain;
+
+entity Car {
+    field name: String;
+    field year: Int;
+}
+
+function groupCars(cars: List<Car>): Map<String, List<Int>> {
+    let names = cars.map<String>(fn(c) => c.name); /* 1. */
+    let years = cars.map<Int>(fn(c) => c.year); /* 2. */
+    let joined = names.joinGroup<Int>( /* 3. */
+        years,
+        fn(name, year) => cars.anyOf(
+            fn(c) => c.name == name && c.year == year
+        )
+    );
+    let result = joined.transformToMap<String, List<Int>>( /* 4. */
+        fn(entry) => entry.0,
+        fn(entry) => entry.1
+    );
+    return result;
+}
+
+entrypoint function main(): Map<String, List<Int>> {
+    let cars = List<Car>@{
+        Car@{ "Audi", 2001 }, Car@{ "Ford", 2002 },
+        Car@{ "Ford", 2002 }, Car@{ "Ford", 2004 },
+        Car@{ "Audi", 2003 }, Car@{ "BMW", 2020 }
+    };
+    return groupCars(cars);
+}
