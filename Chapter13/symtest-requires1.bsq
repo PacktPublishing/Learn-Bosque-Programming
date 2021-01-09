@@ -1,0 +1,8 @@
+namespace NSMain;
+
+entrypoint function main(arg: Int): Int
+    requires release (arg < Int::max_value / 2);
+{
+
+    return arg * 2;
+}

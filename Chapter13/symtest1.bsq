@@ -1,0 +1,6 @@
+namespace NSMain;
+
+entrypoint function main(arg: Int): Int {
+
+    return arg * 2;
+}
