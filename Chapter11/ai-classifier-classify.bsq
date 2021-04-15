@@ -62,10 +62,10 @@ function eq(a: Float64, b: Float64): Bool {
 
 function getQuadrant(p1Out: Float64, p2Out: Float64): String {
      let o1, o2 = p1Out, p2Out;
-     return if(eq(o1, 1.0f) && eq(o2, 1.0f)) "Quarter 1"
-            elif(eq(o1, 1.0f) && eq(o2, 0.0f)) "Quarter 2"
-            elif(eq(o1, 0.0f) && eq(o2, 0.0f)) "Quarter 3"
-            elif(eq(o1, 0.0f) && eq(o2, 1.0f)) "Quarter 4"
+     return if(eq(o1, 1.0f) && eq(o2, 1.0f)) "Quadrant 1"
+            elif(eq(o1, 1.0f) && eq(o2, 0.0f)) "Quadrant 2"
+            elif(eq(o1, 0.0f) && eq(o2, 0.0f)) "Quadrant 3"
+            elif(eq(o1, 0.0f) && eq(o2, 1.0f)) "Quadrant 4"
             else "Unknown";
 }
 
