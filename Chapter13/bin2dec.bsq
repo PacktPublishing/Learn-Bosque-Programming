@@ -1,0 +1,36 @@
+namespace NSMain;
+
+function power(base: Int, exp: Int): Int {
+    return if (exp == 0) 1 else base * power(base, exp - 1);
+}
+
+entity Context {
+    field position: Int = 0;
+    field bin: List<Int>;
+    field acc: Int = 0;
+
+    invariant $position <= $bin.size();
+    invariant $bin.size() == 4;
+}
+
+function inBitBounds(...values: List<Int>): Bool {
+    return values.allOf(
+        fn(v) => v == 0 && v == 1
+    );
+}
+entrypoint function main(p1: Int, p2: Int, p3: Int, p4: Int): Int
+    requires release inBitBounds(p1, p2, p3, p4);
+    ensures $return <= 15;
+{
+    let b = List<Int>@{p1, p2, p3, p4};
+    let ctx = Context@{bin = b.reverse()};
+    let resCtx = NSIterate::steps<Context>(
+        ctx,
+        ctx.bin.size(),
+        fn(ctx) => {
+            let dec = power(2, ctx.position) * ctx.bin.get(ctx.position);
+            return ctx.update(acc = ctx.acc + dec, position = ctx.position + 1);
+        }
+    );
+    return resCtx.acc;
+}
