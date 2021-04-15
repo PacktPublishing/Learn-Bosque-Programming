@@ -27,17 +27,26 @@ entity ApplicationContext {
     invariant $leftToSend >= 0;
 }
 
-function sendEmail(ref context: ApplicationContext): ApplicationContext {
+function sendEmail(context: ApplicationContext): ApplicationContext
+    requires context.user != none;
+    ensures $return.leftToSend == context.leftToSend - 1;
+{
     let sent = doSend(context);
-    let { successCount = suc, errorCount = error, leftToSend = left } = context.{ successCount, errorCount, leftToSend };
+    let {
+        successCount = suc, errorCount = error, leftToSend = left
+    } = context.{ successCount, errorCount, leftToSend };
+
     if (sent) {
-        context = context.update(successCount = suc + 1, leftToSend = left - 1);
         _debug(String::concat("Email sent to ", context.user.name, "!"));
+        return context.update(
+            successCount = suc + 1, leftToSend = left - 1
+        );
     } else {
-        context = context.update(errorCount = error + 1, leftToSend = left - 1);
         _debug("Error sending email");
+        return context.update(
+            errorCount = error + 1, leftToSend = left - 1
+        );
     }
-    return context;
 }
 
 function doSend(ctx: ApplicationContext): Bool
@@ -67,5 +76,5 @@ entrypoint function main(): ApplicationContext {
     };
 
     context = enableEmailService(ref context);
-    return sendEmail(ref context);
+    return sendEmail(context);
 }

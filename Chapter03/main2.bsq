@@ -27,12 +27,18 @@ entity ApplicationContext {
 
 function sendEmail(ref context: ApplicationContext): ApplicationContext {
     let sent = doSend(context);
-    let { successCount = suc, errorCount = error, leftToSend = left } = context.{ successCount, errorCount, leftToSend };
+    let {
+        successCount = suc, errorCount = error, leftToSend = left
+    } = context.{ successCount, errorCount, leftToSend };
     if (sent) {
-        context = context.update(successCount = suc + 1, leftToSend = left - 1);
+        context = context.update(
+            successCount = suc + 1, leftToSend = left - 1
+        );
         _debug(String::concat("Email sent to ", context.user.name, "!"));
     } else {
-        context = context.update(errorCount = error + 1, leftToSend = left - 1);
+        context = context.update(
+            errorCount = error + 1, leftToSend = left - 1
+        );
         _debug("Error sending email");
     }
     return context;
