@@ -1,16 +1,20 @@
-namespace NSMain;
+namespace NSMain; 
 
-function multiplyVectors(
-    vector1: List<Int>,
-    vector2: List<Int>
-): Int {
-    return vector1
-        .mapIndex<Int>(fn(el, i) => el * vector2.get(i))
-        .sum();
-}
+function multiplyVectors( 
+    vector1: List<Float64>, 
+    vector2: List<Float64> 
+): Float64 { 
+    return Float64::sum( 
+        vector1.mapIndex<Float64>( 
+            fn(el, i) => Float64::product( 
+                List<Float64>@{ el, vector2.get(i) } 
+            ) 
+        ) 
+    ); 
+} 
 
-entrypoint function main(): Int {
-    let va = List<Int>@{ 2, 4, 7, 12, 1, 7, 3 };
-    let vb = List<Int>@{ 8, 4, 32, 64, 8, 9, 2 };
-    return multiplyVectors(va, vb);
+entrypoint function main(): Float64 { 
+    let va = List<Float64>@{ 2.0f, 4.0f, 7.0f, 12.0f }; 
+    let vb = List<Float64>@{ 8.0f, 4.0f, 32.0f, 6.0f }; 
+    return multiplyVectors(va, vb); 
 }
