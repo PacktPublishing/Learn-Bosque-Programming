@@ -1,0 +1,67 @@
+namespace NSMain;
+
+ entity Emitter  {
+    field measured_power: Float64 = -69.0f; // Provided by the manufacturer
+    field rssi: Float64;
+
+    field x: Float64;
+    field y: Float64;
+
+    factory static create(rssi: String, x: String, y: String): {rssi: Float64, x: Float64, y: Float64} {
+
+        return {
+            rssi=Float64::parse(rssi),
+            x=Float64::parse(x),
+            y=Float64::parse(y)
+        };
+    }
+    method calcDistance(): Float64 {
+
+      let n = 2.0f; // Environmental factor constant
+      let ratio = (this.measured_power - this.rssi) / (10.0f * n);
+
+      return Float64::pow(10.0f, ratio);
+    }
+}
+
+entity IndoorPositionEstimator {
+
+    field emitters: List<Emitter>;
+
+    method calcPosition(): {x: Float64, y: Float64} {
+
+        let d1 = this.emitters.get(0).calcDistance();
+        let d2 = this.emitters.get(1).calcDistance();
+        let d3 = this.emitters.get(2).calcDistance();
+
+        let a = (-2.0f * this.emitters.get(0).x) + (-2.0f * this.emitters.get(1).x);
+        let b = (-2.0f * this.emitters.get(0).y) + (-2.0f * this.emitters.get(1).y);
+        let c = (Float64::pow(d1, -2.0f) - Float64::pow(d2, -2.0f)) - (Float64::pow(this.emitters.get(0).x, -2.0f) + Float64::pow(this.emitters.get(1).x, -2.0f)) - (Float64::pow(this.emitters.get(0).y, -2.0f)  + Float64::pow(this.emitters.get(1).y, -2.0f));
+        let d = (-2.0f * this.emitters.get(1).x) + (-2.0f * this.emitters.get(2).x);
+        let e = (-2.0f * this.emitters.get(1).y) + (-2.0f * this.emitters.get(2).y);
+        let f = (Float64::pow(d2, -2.0f) - Float64::pow(d3, -2.0f)) - (Float64::pow(this.emitters.get(1).x, -2.0f) + Float64::pow(this.emitters.get(2).x, -2.0f)) - (Float64::pow(this.emitters.get(1).y, -2.0f) + Float64::pow(this.emitters.get(2).y, -2.0f));
+
+        let x = (c * e) - (f * b) / (e * a) - (b * d);
+        let y = (c * d) - (a * f) / (b * d) - (a * e);
+
+        return {x=x, y=y};
+    }
+}
+
+entrypoint function runner(
+    rssi1: String, rssi2: String, rssi3: String,
+    x1: String, x2: String, x3: String,
+    y1: String, y2: String, y3: String
+  ): {x: Float64, y: Float64} {
+
+    let estimator = IndoorPositionEstimator@{
+
+        emitters=List<Emitter>@{
+            Emitter@create(rssi1, x1, y1),
+            Emitter@create(rssi2, x2, y2),
+            Emitter@create(rssi3, x3, y3)
+        }
+    };
+
+    return estimator.calcPosition();
+}
