@@ -1,0 +1,52 @@
+namespace NSMain;
+
+concept Animal {
+    field name: String = "Unknown";
+
+    method eat(): String {
+        // Eat
+        return "yummy";
+    }
+
+    method sleep(): String {
+        // Sleep
+        return "zzz";
+    }
+
+    method makeSound(): String;
+}
+
+entity Dog provides Animal {
+    override method makeSound(): String {
+        return "Woof";
+    }
+}
+
+entity Cat provides Animal {
+    override method makeSound(): String {
+        return "Meow";
+    }
+}
+
+entity Bird provides Animal {
+    override method makeSound(): String {
+        return "Tweet";
+    }
+
+    method fly(): String {
+        return "Flying ... ";
+    }
+}
+
+entrypoint function main(): String {
+
+    let dog = Dog@{};
+    let cat = Cat@{};
+    let bird = Bird@{};
+
+    _debug(dog.makeSound());
+    _debug(cat.makeSound());
+    _debug(bird.makeSound());
+
+    return "";
+}
