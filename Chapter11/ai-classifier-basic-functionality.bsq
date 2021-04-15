@@ -1,26 +1,30 @@
 namespace NSMain;
 
 entity Perceptron {
-    field weights: List<Int>;
-    field alfa: Int = 1;
+    field weights: List<Float64>;
+    field alfa: Float64 = 1.0f;
 }
 
-function activation(s: Int): Int {
-    return if (s > 0) 1 else 0;
+function activation(s: Float64): Float64 {
+    return if (Float64::compare(s, 0.0f) == 1) 1.0f else 0.0f;
 }
 
 function multiplyVectors(
-    vector1: List<Int>,
-    vector2: List<Int>
-): Int {
-    return vector1
-        .mapIndex<Int>(fn(el, i) => el * vector2.get(i))
-        .sum();
+    vector1: List<Float64>,
+    vector2: List<Float64>
+): Float64 {
+    return Float64::sum(
+        vector1.mapIndex<Float64>(
+            fn(el, i) => Float64::product(
+                List<Float64>@{ el, vector2.get(i) }
+            )
+        )
+    );
 }
 
-entrypoint function main(): Int {
-    let p = Perceptron@{ List<Int>@{ 2, 3 } };
-    let inputs = List<Int>@{ 2, 4 };
+entrypoint function main(): Float64 {
+    let p = Perceptron@{ List<Float64>@{ 2.0f, 3.0f } };
+    let inputs = List<Float64>@{ 2.0f, 4.0f };
     let dotProduct = multiplyVectors( inputs, p.weights );
     let output = activation(dotProduct);
     return output;

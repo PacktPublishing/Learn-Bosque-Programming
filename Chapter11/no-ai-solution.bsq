@@ -1,8 +1,8 @@
 namespace NSMain;
 
 entrypoint function main(x: Int, y: Int): String {
-    return if (x > 0 && y > 0) "Quarter 1"
-           elif (x < 0 && y > 0) "Quarter 2"
-           elif (x < 0 && y < 0) "Quarter 3"
-           else "Quarter 4";
+    return if (x > 0 && y > 0) "Quadrant 1"
+           elif (x < 0 && y > 0) "Quadrant 2"
+           elif (x < 0 && y < 0) "Quadrant 3"
+           else "Quadrant 4";
 }

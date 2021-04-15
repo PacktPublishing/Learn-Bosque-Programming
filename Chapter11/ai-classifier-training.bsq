@@ -1,63 +1,79 @@
 namespace NSMain;
 
-typedef Sample = [Int, Int, Int];
+typedef Sample = [Float64, Float64, Float64, Float64];
 
 entity Perceptron {
-    field weights: List<Int>;
-    field alfa: Int = 1;
+    field weights: List<Float64>;
+    field alfa: Float64 = 1.0f;
     field currentSample: Int = 0;
 }
 
-function activation(s: Int): Int {
-    return if (s > 0) 1 else 0;
+function activation(s: Float64): Float64 {
+    return if (Float64::compare(s, 0.0f) == 1) 1.0f else 0.0f;
 }
 
 function multiplyVectors(
-    vector1: List<Int>,
-    vector2: List<Int>
-): Int {
-    return vector1
-        .mapIndex<Int>(fn(el, i) => el * vector2.get(i))
-        .sum();
+    vector1: List<Float64>,
+    vector2: List<Float64>
+): Float64 {
+    return Float64::sum(
+        vector1.mapIndex<Float64>(
+            fn(el, i) => Float64::product(
+                List<Float64>@{ el, vector2.get(i) }
+            )
+        )
+    );
 }
 
 function train(
     perceptron: Perceptron,
-    trainData: List<Sample>
+    trainData: List<Sample>,
+    pNum: Int
 ): Perceptron {
     return NSIterate::steps<Perceptron>(
         perceptron,
         trainData.size(),
         fn(perc) => {
             let { weights = w, currentSample = i, alfa = a } = perc.{ weights, currentSample, alfa };
-            let [x, y, target] = trainData.get(i);
-            let sum = multiplyVectors(List<Int>@{x, y}, w);
+            let [x, y, target1, target2] = trainData.get(i);
+            let target = if (pNum == 1) target1 else target2;
+            let sum = multiplyVectors(List<Float64>@{x, y}, w);
             let output = activation(sum);
 
             let w1 = w.get(0) + a * (target - output) * x;
             let w2 = w.get(1) + a * (target - output) * y;
 
             return perc.update(
-                weights = List<Int>@{w1, w2},
+                weights = List<Float64>@{w1, w2},
                 currentSample = i + 1
             );
         }
     );
 }
 
-entrypoint function main(): Int {
-    var p = Perceptron@{ List<Int>@{ 2, 3 } };
-    let trainSet = List<Sample>@{
-        [5, -5, 1],
-        [-5, -5, 0],
-        [-5, 5, 0],
-        [5, 5, 1]
-    };
-    p = train(p, trainSet);
+entrypoint function main(): Float64 {
+    var p = Perceptron@{ List<Float64>@{ 2.0f, 3.0f } };
 
-    let inputs = List<Int>@{ -2, 4 };
+    let trainSet = List<Sample>@{ 
+        [5.0f, -5.0f, 0.0f, 1.0f], 
+        [-5.0f, -5.0f, 0.0f, 0.0f], 
+        [-5.0f, 5.0f, 1.0f, 0.0f], 
+        [5.0f, 5.0f, 1.0f, 1.0f], 
+        [4.0f, 0.0f, 1.0f, 1.0f], 
+        [9.0f, 9.0f, 1.0f, 1.0f], 
+        [9.0f, -3.0f, 0.0f, 1.0f], 
+        [5.0f, -6.0f, 0.0f, 1.0f], 
+        [5.0f, -10.0f, 0.0f, 1.0f], 
+        [6.0f, 8.0f, 1.0f, 1.0f], 
+        [-6.0f, 3.0f, 1.0f, 0.0f], 
+        [-7.0f, 6.0f, 1.0f, 0.0f], 
+        [-7.0f, -1.0f, 0.0f, 0.0f], 
+        [-6.0f, -6.0f, 0.0f, 0.0f] 
+    };
+    p = train(p, trainSet, 1);
+
+    let inputs = List<Float64>@{ -2.0f, 4.0f };
     let dotProduct = multiplyVectors( inputs, p.weights );
     let output = activation(dotProduct);
-
     return output;
 }
