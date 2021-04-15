@@ -1,0 +1,53 @@
+namespace NSMain;
+
+function sw1(x: Int): String {
+    switch(x) {
+        case 1 => { return "option one"; }
+        case 2 => { return "option two"; }
+        case _ => { return "any other option"; }
+    }
+}
+
+function sw2(x: Int | Bool | String?): String {
+    switch(x) {
+        type Bool => { return "is boolean"; }
+        type Int => { return "is integer"; }
+        type String => {return "is string"; }
+        case _ => { return "unknown"; }
+    }
+}
+
+function sw3(): Int? {
+    var x = [1, 5];
+    switch(x) {
+        case [1, let y: Int] => { return y; }
+        case [2, let z: Int] => { return z; }
+        case _ => { return none; }
+    }
+}
+
+function sw4(): Int? {
+    var x = {height=1, width=5};
+    var w: Int;
+    switch(x) {
+        case {height=1, width=w} => { return w; }
+        case {height=2, width=w} => { return w; }
+        case _ => { return none; }
+    }
+}
+
+function abs(x: Int): Int {
+    switch(x) {
+        case Int when x >= 0 => { return x; }
+        case Int when x < 0 => { return -x; }
+    }
+}
+
+entrypoint function main(): String {
+    _debug(sw1(1));
+    _debug(sw2(4));
+    _debug(sw3());
+    _debug(sw4());
+    _debug(abs(-9));
+    return "Done.";
+}
