@@ -1,0 +1,9 @@
+namespace NSYourApplication;  
+
+entrypoint function api_request(): String {
+    // Do something
+}
+
+entrypoint function cli_call(): String {
+    // Do something
+}

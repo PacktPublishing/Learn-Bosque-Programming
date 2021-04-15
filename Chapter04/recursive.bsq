@@ -1,0 +1,11 @@
+namespace NSFibonacci; 
+
+recursive function fibonacciNumber(n: Int): Int {  
+    return if (n == 0) 0 
+        elif (n < 3) 1  
+        else fibonacciNumber(n-1) + fibonacciNumber(n-2); 
+}  
+
+entrypoint function calc_n_pos_fibonacci(n: Int) Int { 
+    return fibonacciNumber(n); 
+}

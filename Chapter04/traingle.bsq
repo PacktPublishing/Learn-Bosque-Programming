@@ -1,0 +1,5 @@
+namespace NSMain;
+
+entrypoint function triangleArea(base: Int, height: Int): Float64 {
+    return (base * height) / 2;
+}
