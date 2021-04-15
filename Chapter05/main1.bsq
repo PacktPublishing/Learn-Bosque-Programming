@@ -1,0 +1,12 @@
+namespace NSMain;
+
+concept Foo { 
+    field x: Int; 
+} 
+
+entity Bar provides Foo { } 
+
+entrypoint function main(): Int {
+    let baz = Bar@{x=1};
+    return 0;
+}

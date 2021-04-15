@@ -1,0 +1,25 @@
+namespace NSMain;
+
+typedef CurrencyFormat = /(\d)+(USD|EUR)/;
+
+function convertToUSD(input: SafeString<CurrencyFormat>): Float64 {
+
+    let dvalinput = /?<number>\d+/.match(input.string()).number;
+    let dval = Float64::parse(dvalinput);
+
+    if(size.string().endsWith("USD")) {
+        return dval;
+    } else {
+        return convertEURToUSD(dval);
+    }
+}
+
+function convertEURToUSD (euros: Float64): Float64 {
+    // Do something
+    return euros * 1.18f;
+}
+
+entrypoint function main(): Float64 {
+    var amount = CurrencyFormat'100EUR';
+    return convertToUSD(amount);
+}
