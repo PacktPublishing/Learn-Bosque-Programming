@@ -1,30 +1,34 @@
 namespace NSMain;
 
 entity PhoneNumber provides Parsable { 
-    field local: String; 
+    field number: String; 
 
-    hidden static parseNumber(str: String): Result<String, String> { 
-        // Perform the parse 
+    hidden static parseNumber(str: String): Result<String, String> {
+        if (str.length() <= 9) {
+            return ok(str);
+        } else {
+            return err("Invalid Phone Number"); 
+        }
     } 
 
-    override static tryParse(str: String): Result<Any, String> { 
+    override static tryParse(str: String): Result<PhoneNumber, String> { 
         let result = PhoneNumber::parseNumber(str);  
 
-        if(result.isErr()) { 
-            return Result<Any, String>::err("Invalid Phone Number"); 
-        } else { 
-            let phone = PhoneNumber@{number=result.value()}; 
-            return Result<Any, String>::ok(phone); 
+        if(result.isErr()) {
+            return err(result.failure()); 
+        } else {
+            let phone = PhoneNumber@{number=result.result()}; 
+            return ok(phone); 
         } 
     } 
 } 
 
-function sendSMSNotification(phone: StringOf<PhoneNumber>: String {
+function sendSMSNotification(phone: StringOf<PhoneNumber>): String {
     // Send the notification 
-    return String::concat("Send to", phone.string());
+    return String::concat("Send to ", phone.string());
 }
 
 entrypoint function main(): String {
-    var num = PhoneNumber'...';
+    var num = PhoneNumber'995678576';
     return sendSMSNotification(num);
 }

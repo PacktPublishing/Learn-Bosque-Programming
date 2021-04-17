@@ -36,10 +36,10 @@ function sw4(): Int? {
     }
 }
 
-function abs(x: Int): Int {
+function abs(x: Int?): Int {
     switch(x) {
-        case Int when x >= 0 => { return x; }
-        case Int when x < 0 => { return -x; }
+        type Int when x >= 0 => { return x; }
+        type Int when x < 0 => { return -x; }
     }
 }
 
