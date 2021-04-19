@@ -15,7 +15,7 @@ entity Context {
 
 function inBitBounds(...values: List<Int>): Bool {
     return values.allOf(
-        fn(v) => v == 0 && v == 1
+        fn(v) => v == 0 || v == 1
     );
 }
 entrypoint function main(p1: Int, p2: Int, p3: Int, p4: Int): Int
