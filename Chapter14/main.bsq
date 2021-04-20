@@ -1,0 +1,81 @@
+namespace NSMain;
+
+function findIndexOfMin(dists: List<Int>, unvisited: List<Bool>): Int {
+
+    let unvisitedDistances = unvisited.mapIndex<Int>(
+        fn(curr, i) => if (curr == true) dists.get(i) else Int::max_value
+    );
+
+    return unvisitedDistances.lastIndexOf(unvisitedDistances.min()); 
+}
+
+function findNeighbours(arr: List<Int>): List<Int> {
+    return arr
+        .mapIndex<Int>(fn(c, i) => if(c != 0) i else -1)
+        .filter(fn(i) => i != -1); // filter out non-neighbours
+}
+
+entity PathContext { 
+    field graph: List<List<Int>> = List<List<Int>>@{
+        List<Int>@{0, 2, 3, 0, 0, 0, 0, 0, 0, 0},
+        List<Int>@{2, 0, 0, 0, 0, 5, 0, 0, 0, 0},
+        List<Int>@{3, 0, 0, 4, 0, 3, 0, 0, 0, 0},
+        List<Int>@{0, 0, 4, 0, 2, 0, 0, 0, 0, 0},
+        List<Int>@{0, 0, 0, 2, 0, 0, 0, 9, 0, 0},
+        List<Int>@{0, 5, 3, 0, 0, 0, 7, 0, 0, 0},
+        List<Int>@{0, 0, 0, 0, 0, 7, 0, 2, 3, 0},
+        List<Int>@{0, 0, 0, 0, 9, 0, 2, 0, 0, 7},
+        List<Int>@{0, 0, 0, 0, 0, 0, 3, 0, 0, 2},
+        List<Int>@{0, 0, 0, 0, 0, 0, 0, 7, 2, 0}
+    };
+
+    field v: Int = 0;
+
+    field unvisited: List<Bool> = List<Bool>@{ true, true, true, true, true, true, true, true, true, true }; 
+
+    field psc: PathStepContext = PathStepContext@{
+        distances = List<Int>@{ 0, Int::max_value, Int::max_value, Int::max_value, Int::max_value, Int::max_value, Int::max_value, Int::max_value, Int::max_value, Int::max_value }
+    };
+}
+
+entity PathStepContext { 
+    field distances: List<Int>; 
+    field i: Int = 0; 
+}
+
+entrypoint function main(): String {
+    var pc = PathContext@{}; 
+
+    pc = NSIterate::steps<PathContext>(
+        pc,
+        pc.graph.size(),
+        fn(pc) => {
+            let current = findIndexOfMin(pc.psc.distances, pc.unvisited);
+            let neighbours = findNeighbours(pc.graph.get(current));
+            let psctx = NSIterate::steps<PathStepContext>(
+                pc.psc.update(i = 0),
+                neighbours.size(),
+                fn(psc) => {
+                    let n = neighbours.get(psc.i);
+                    let notVisited = pc.unvisited.get(n) == true;
+                    let distToN = psc.distances.get(current) + pc.graph.get(current).get(n);
+                    let dists = psc.distances.mapIndex<Int>(fn(d, i)=>{
+                        return if (notVisited && distToN <= psc.distances.get(n) && i == n) distToN else d;
+                    });
+                    return psc.update(i = psc.i + 1, distances = dists);
+                } 
+            ); 
+
+            return pc.update( 
+                v = pc.v + 1,
+                unvisited = pc.unvisited.mapIndex<Bool>(fn(curr, i) => if(i == current) false else curr),
+                psc = psctx
+            ); 
+        } 
+    );
+
+    _debug("Shortests paths from vertex 0:"); 
+    _debug(pc.psc.distances); 
+
+    return "Done."; 
+}
