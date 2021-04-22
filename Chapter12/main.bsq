@@ -13,7 +13,7 @@ concept Animal {
         return "zzz";
     }
 
-    method makeSound(): String;
+    abstract method makeSound(): String;
 }
 
 entity Dog provides Animal {
@@ -40,13 +40,9 @@ entity Bird provides Animal {
 
 entrypoint function main(): String {
 
-    let dog = Dog@{};
-    let cat = Cat@{};
-    let bird = Bird@{};
+    _debug(Dog@{name="Bob"}.makeSound());
+    _debug(Cat@{name="Kitty"}.makeSound());
+    _debug(Bird@{name="Tiki"}.makeSound());
 
-    _debug(dog.makeSound());
-    _debug(cat.makeSound());
-    _debug(bird.makeSound());
-
-    return "";
+    return "Done.";
 }
