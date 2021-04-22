@@ -4,10 +4,12 @@ typedef CurrencyFormat = /(\d)+(USD|EUR)/;
 
 function convertToUSD(input: SafeString<CurrencyFormat>): Float64 {
 
-    let dvalinput = /?<number>\d+/.match(input.string()).number;
-    let dval = Float64::parse(dvalinput);
+    let strInput = input.string();
+    let regexMatch = /(\d)+/.match(strInput);
 
-    if(size.string().endsWith("USD")) {
+    let dval = Float64::parse(strInput.substring(regexMatch.index, regexMatch.index + regexMatch.length));
+
+    if(strInput.endsWith("USD")) {
         return dval;
     } else {
         return convertEURToUSD(dval);
