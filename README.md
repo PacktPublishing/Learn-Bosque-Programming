@@ -64,3 +64,7 @@ Currently, he’s working as a backend lead at a Polish software company where h
 **Joel Ibaceta**
 is an experienced software engineer who started writing code at an early age. Currently, he has more than 12 years of experience in the technology industry, building software and leading engineering teams throughout South America. He served as the technical leader of MercadoLibre, a Latin American unicorn, NASDAQ-100 company, and he currently works as co-founder and CTO of Kwema Inc., a US-based start-up that develops wearables for employees’ safety.
 He is a well-known speaker in LatAm technical communities and a hackathon enthusiast who has won some global prizes such as the Facebook Community Challenge.
+### Download a free PDF
+
+ <i>If you have already purchased a print or Kindle version of this book, you can get a DRM-free PDF version at no cost.<br>Simply click on the link to claim your free PDF.</i>
+<p align="center"> <a href="https://packt.link/free-ebook/9781839211973">https://packt.link/free-ebook/9781839211973 </a> </p>
